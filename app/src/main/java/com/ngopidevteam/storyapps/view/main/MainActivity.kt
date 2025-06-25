@@ -13,7 +13,7 @@ import com.ngopidevteam.storyapps.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel>{
-        ViewModelFactory.getInstance()
+        ViewModelFactory.getInstance(this)
     }
 
     private lateinit var binding: ActivityMainBinding

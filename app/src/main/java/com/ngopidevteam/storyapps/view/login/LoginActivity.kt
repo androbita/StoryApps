@@ -3,19 +3,20 @@ package com.ngopidevteam.storyapps.view.login
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.ngopidevteam.storyapps.data.pref.UserModel
+import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.databinding.ActivityLoginBinding
 import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel>{
-        ViewModelFactory.getInstance()
+        ViewModelFactory.getInstance(this)
     }
 
     private lateinit var binding: ActivityLoginBinding
@@ -25,25 +26,71 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        observeUserLoginState()
         setupView()
         setupAction()
+        observeLoginResult()
+    }
+
+    private fun observeUserLoginState() {
+        viewModel.user.observe(this) { user ->
+            if (user.isLogin){
+                moveToMainActivity()
+            }
+        }
+    }
+
+    private fun observeLoginResult() {
+        viewModel.loginResult.observe(this) { result ->
+            when (result){
+                is ResultState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.loginButton.isEnabled = false
+                }
+                is ResultState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.loginButton.isEnabled = true
+                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
+                    moveToMainActivity()
+                }
+                is ResultState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.loginButton.isEnabled = true
+                    Toast.makeText(this, "Login gagal: ${result.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun moveToMainActivity(){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun setupAction() {
+
         binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk berbagi pengalaman?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
+
+            val email = binding.emailEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()){
+                Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            viewModel.loginUser(email, password)
+
+            viewModel.user.observe(this) { user ->
+                if (user.isLogin){
+                    Toast.makeText(this, "Berhasil Login sebagai : ${user.email}", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                     finish()
                 }
-                create()
-                show()
             }
         }
     }

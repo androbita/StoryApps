@@ -1,5 +1,6 @@
 package com.ngopidevteam.storyapps.view
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ngopidevteam.storyapps.data.UserRepository
@@ -30,10 +31,10 @@ class ViewModelFactory(private val repository: UserRepository): ViewModelProvide
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
         @JvmStatic
-        fun getInstance(): ViewModelFactory{
+        fun getInstance(context: Context): ViewModelFactory{
             if (INSTANCE == null){
                 synchronized(ViewModelFactory::class.java){
-                    INSTANCE = ViewModelFactory(Injection.provideRepository())
+                    INSTANCE = ViewModelFactory(Injection.provideRepository(context))
                 }
             }
             return INSTANCE as ViewModelFactory

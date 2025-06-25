@@ -1,5 +1,6 @@
 package com.ngopidevteam.storyapps.data.pref
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -12,19 +13,21 @@ import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
-class UserPreferences private constructor(private val dataStore: DataStore<Preferences>){
+class UserPreferences private constructor(private val context: Context){
 
     companion object {
-        @Volatile
-        private var INSTANCE: UserPreferences? = null
 
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
 
-        fun getInstance(dataStore: DataStore<Preferences>): UserPreferences {
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var INSTANCE: UserPreferences? = null
+
+        fun getInstance(context: Context): UserPreferences {
             return INSTANCE ?: synchronized(this) {
-                val instance = UserPreferences(dataStore)
+                val instance = UserPreferences(context)
                 INSTANCE = instance
                 instance
             }
@@ -32,7 +35,7 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
     }
 
     suspend fun saveSession(user: UserModel) {
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN_KEY] = user.token
             preferences[IS_LOGIN_KEY] = true
@@ -40,17 +43,17 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
     }
 
     fun getSession(): Flow<UserModel> {
-        return dataStore.data.map { preferences ->
+        return context.dataStore.data.map { preferences ->
             UserModel(
                 preferences[EMAIL_KEY] ?: "",
                 preferences[TOKEN_KEY] ?: "",
-                preferences[IS_LOGIN_KEY] ?: false
+                preferences[IS_LOGIN_KEY] == true
             )
         }
     }
 
     suspend fun logout(){
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences.clear()
         }
     }

@@ -19,7 +19,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
 
     private val viewModel: SignupViewModel by viewModels{
-        ViewModelFactory(Injection.provideRepository())
+        ViewModelFactory(Injection.provideRepository(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
