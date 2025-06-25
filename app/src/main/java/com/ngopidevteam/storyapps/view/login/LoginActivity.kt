@@ -15,7 +15,7 @@ import com.ngopidevteam.storyapps.view.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel>{
-        ViewModelFactory.getInstance(this)
+        ViewModelFactory.getInstance()
     }
 
     private lateinit var binding: ActivityLoginBinding
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.saveSession(UserModel(email, "sample_token"))
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                setMessage("Anda berhasil login. Sudah tidak sabar untuk berbagi pengalaman?")
                 setPositiveButton("Lanjut") { _, _ ->
                     val intent = Intent(context, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

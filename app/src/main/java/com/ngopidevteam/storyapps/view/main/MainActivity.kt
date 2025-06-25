@@ -13,7 +13,7 @@ import com.ngopidevteam.storyapps.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel>{
-        ViewModelFactory.getInstance(this)
+        ViewModelFactory.getInstance()
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -23,12 +23,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin){
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
-            }
-        }
+//        viewModel.getSession().observe(this) { user ->
+//            if (!user.isLogin){
+//                startActivity(Intent(this, WelcomeActivity::class.java))
+//                finish()
+//            }
+//        }
 
         setupView()
         setupAction()
@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.logoutButton.setOnClickListener {
-            viewModel.logout()
+//            viewModel.logout()
+            startActivity(Intent(this, WelcomeActivity::class.java))
         }
     }
 

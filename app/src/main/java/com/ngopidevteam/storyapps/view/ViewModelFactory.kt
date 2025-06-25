@@ -1,12 +1,12 @@
 package com.ngopidevteam.storyapps.view
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ngopidevteam.storyapps.data.UserRepository
 import com.ngopidevteam.storyapps.di.Injection
 import com.ngopidevteam.storyapps.view.login.LoginViewModel
 import com.ngopidevteam.storyapps.view.main.MainViewModel
+import com.ngopidevteam.storyapps.view.signup.SignupViewModel
 
 class ViewModelFactory(private val repository: UserRepository): ViewModelProvider.NewInstanceFactory() {
 
@@ -19,6 +19,9 @@ class ViewModelFactory(private val repository: UserRepository): ViewModelProvide
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
+                SignupViewModel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
@@ -27,10 +30,10 @@ class ViewModelFactory(private val repository: UserRepository): ViewModelProvide
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
         @JvmStatic
-        fun getInstance(context: Context): ViewModelFactory{
+        fun getInstance(): ViewModelFactory{
             if (INSTANCE == null){
                 synchronized(ViewModelFactory::class.java){
-                    INSTANCE = ViewModelFactory(Injection.provideRepository(context))
+                    INSTANCE = ViewModelFactory(Injection.provideRepository())
                 }
             }
             return INSTANCE as ViewModelFactory

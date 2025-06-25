@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- STATE: error -->
+    <item android:state_selected="true" android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="2dp" android:color="#B00020"/> <!-- warna merah error -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- STATE: focus -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="2dp" android:color="#6200EE"/> <!-- warna ungu fokus -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- STATE: normal -->
+    <item android:state_selected="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="2dp" android:color="#000000"/> <!-- warna hitam normal -->
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+</selector>

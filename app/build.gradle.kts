@@ -56,6 +56,18 @@ dependencies {
 
     implementation(libs.activity.ktx)
 
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    //lifecycleScope
+    implementation(libs.lifecycle.runtime.ktx)
+
+    //Coroutine & ViewModel
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
