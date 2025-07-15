@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.data.UserRepository
-import com.ngopidevteam.storyapps.remote.response.SignupResponse
+import com.ngopidevteam.storyapps.remote.response.SimpleResponse
 import kotlinx.coroutines.launch
 
 class SignupViewModel(private val repository: UserRepository): ViewModel() {
 
-    private val _registerResult = MutableLiveData<ResultState<SignupResponse>>()
-    val registerResult: LiveData<ResultState<SignupResponse>> = _registerResult
+    private val _registerResult = MutableLiveData<ResultState<SimpleResponse>>()
+    val registerResult: LiveData<ResultState<SimpleResponse>> = _registerResult
 
     fun register(name: String, email: String, password: String){
         _registerResult.value = ResultState.Loading

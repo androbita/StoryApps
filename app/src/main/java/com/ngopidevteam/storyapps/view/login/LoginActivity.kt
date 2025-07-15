@@ -3,6 +3,7 @@ package com.ngopidevteam.storyapps.view.login
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -15,7 +16,7 @@ import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
-    private val viewModel by viewModels<LoginViewModel>{
+    private val viewModel: LoginViewModel by viewModels{
         ViewModelFactory.getInstance(this)
     }
 
@@ -50,13 +51,15 @@ class LoginActivity : AppCompatActivity() {
                 is ResultState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.loginButton.isEnabled = true
-                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
+                    Log.d("LoginActivity", "Login berhasil: ${result.data.message}")
+//                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
                     moveToMainActivity()
                 }
                 is ResultState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.loginButton.isEnabled = true
-                    Toast.makeText(this, "Login gagal: ${result.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login failed: ${result.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("LoginActivity", "Login gagal: ${result.message}")
                 }
             }
         }
@@ -78,6 +81,7 @@ class LoginActivity : AppCompatActivity() {
 
             if (email.isEmpty() || password.isEmpty()){
                 Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
+                Log.d("LoginActivity", "Semua field harus diisi")
                 return@setOnClickListener
             }
 
@@ -85,7 +89,8 @@ class LoginActivity : AppCompatActivity() {
 
             viewModel.user.observe(this) { user ->
                 if (user.isLogin){
-                    Toast.makeText(this, "Berhasil Login sebagai : ${user.email}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Success login as : ${user.email}", Toast.LENGTH_SHORT).show()
+                    Log.d("LoginActivity", "Berhasil Login sebagai : ${user.email}")
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)

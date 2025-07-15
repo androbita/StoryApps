@@ -7,7 +7,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.databinding.ActivitySignupBinding
@@ -42,13 +41,13 @@ class SignupActivity : AppCompatActivity() {
                 is ResultState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.signupButton.isEnabled = true
-                    Toast.makeText(this, "Berhasil daftar: ${result.data.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registration Success: ${result.data.message}", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 is ResultState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.signupButton.isEnabled = true
-                    Toast.makeText(this, "Gagal daftar: ${result.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registration Failed: ${result.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.ngopidevteam.storyapps.data.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,6 +21,8 @@ class UserPreferences private constructor(private val context: Context){
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
+        private val USER_ID_KEY = stringPreferencesKey("userId")
+        private val NAME_KEY = stringPreferencesKey("name")
 
         @SuppressLint("StaticFieldLeak")
         @Volatile
@@ -39,6 +42,8 @@ class UserPreferences private constructor(private val context: Context){
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN_KEY] = user.token
             preferences[IS_LOGIN_KEY] = true
+            preferences[USER_ID_KEY] = user.userId
+            preferences[NAME_KEY] = user.name
         }
     }
 
@@ -47,7 +52,9 @@ class UserPreferences private constructor(private val context: Context){
             UserModel(
                 preferences[EMAIL_KEY] ?: "",
                 preferences[TOKEN_KEY] ?: "",
-                preferences[IS_LOGIN_KEY] == true
+                preferences[IS_LOGIN_KEY] == true,
+                preferences[USER_ID_KEY] ?: "",
+                preferences[NAME_KEY] ?: ""
             )
         }
     }

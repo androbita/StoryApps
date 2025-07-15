@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -67,6 +68,12 @@ dependencies {
     //Coroutine & ViewModel
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    //glide
+    implementation(libs.glide)
+
+    //transition
+    implementation(libs.androidx.transition)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

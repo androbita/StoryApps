@@ -7,7 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.data.UserRepository
-import com.ngopidevteam.storyapps.data.pref.UserModel
+import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.remote.response.LoginResponse
 import kotlinx.coroutines.launch
 
