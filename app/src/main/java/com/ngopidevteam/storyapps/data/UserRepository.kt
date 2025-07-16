@@ -9,6 +9,8 @@ import com.ngopidevteam.storyapps.remote.response.SimpleResponse
 import com.ngopidevteam.storyapps.remote.response.StoryResponse
 import com.ngopidevteam.storyapps.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.HttpException
 
 class UserRepository(
@@ -69,6 +71,24 @@ class UserRepository(
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message
             ResultState.Error(errorMessage ?: "unexpected error")
+        }
+    }
+
+    //upload story
+    suspend fun uploadStory(
+        token: String,
+        description: RequestBody,
+        photo: MultipartBody.Part
+    ): ResultState<String>{
+        return try {
+            val response = apiService.uploadStory(description, photo)
+            if (response.error == false){
+                ResultState.Success(response.message.toString())
+            }else{
+                ResultState.Error(response.message.toString())
+            }
+        }catch (e: Exception){
+            ResultState.Error(e.message ?: "Upload Gagal")
         }
     }
 

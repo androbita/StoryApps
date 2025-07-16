@@ -51,8 +51,6 @@ class LoginActivity : AppCompatActivity() {
                 is ResultState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.loginButton.isEnabled = true
-                    Log.d("LoginActivity", "Login berhasil: ${result.data.message}")
-//                    Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
                     moveToMainActivity()
                 }
                 is ResultState.Error -> {
@@ -90,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.user.observe(this) { user ->
                 if (user.isLogin){
                     Toast.makeText(this, "Success login as : ${user.email}", Toast.LENGTH_SHORT).show()
-                    Log.d("LoginActivity", "Berhasil Login sebagai : ${user.email}")
+                    Log.d("LoginActivity", "Berhasil Login sebagai : ${user.token}")
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)

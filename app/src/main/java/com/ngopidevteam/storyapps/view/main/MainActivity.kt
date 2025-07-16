@@ -1,5 +1,6 @@
 package com.ngopidevteam.storyapps.view.main
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,15 +11,18 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.data.adapter.StoryAdapter
+import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.databinding.ActivityMainBinding
 import com.ngopidevteam.storyapps.remote.response.ListStoryItem
 import com.ngopidevteam.storyapps.view.detail.DetailActivity
 import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.addstory.AddStoryActivity
 import com.ngopidevteam.storyapps.view.login.LoginActivity
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +31,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var user: UserModel
     private var storyAdapter = StoryAdapter(ArrayList<ListStoryItem>())
+
+    companion object{
+        const val ADD_STORY_REQUEST_CODE = 123
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +49,17 @@ class MainActivity : AppCompatActivity() {
         setupRecView()
         setupAction()
         addStory()
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_STORY_REQUEST_CODE && resultCode == RESULT_OK){
+            viewModel.getStories(page = 1, size = 10, location = 0)
+        }
     }
 
     private fun addStory() {

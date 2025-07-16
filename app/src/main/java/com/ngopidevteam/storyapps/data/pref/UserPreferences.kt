@@ -3,6 +3,7 @@ package com.ngopidevteam.storyapps.data.pref
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -11,8 +12,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.ngopidevteam.storyapps.data.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
 class UserPreferences private constructor(private val context: Context){
 
@@ -23,6 +22,8 @@ class UserPreferences private constructor(private val context: Context){
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
         private val USER_ID_KEY = stringPreferencesKey("userId")
         private val NAME_KEY = stringPreferencesKey("name")
+
+        val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
         @SuppressLint("StaticFieldLeak")
         @Volatile
