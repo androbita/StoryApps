@@ -1,6 +1,5 @@
 package com.ngopidevteam.storyapps.view.main
 
-import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,23 +9,19 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.data.adapter.StoryAdapter
 import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.databinding.ActivityMainBinding
 import com.ngopidevteam.storyapps.remote.response.ListStoryItem
-import com.ngopidevteam.storyapps.view.detail.DetailActivity
 import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.addstory.AddStoryActivity
 import com.ngopidevteam.storyapps.view.login.LoginActivity
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainViewModel by viewModels{
+    private val viewModel: MainViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
 
@@ -34,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var user: UserModel
     private var storyAdapter = StoryAdapter(ArrayList<ListStoryItem>())
 
-    companion object{
+    companion object {
         const val ADD_STORY_REQUEST_CODE = 123
     }
 
@@ -57,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ADD_STORY_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == ADD_STORY_REQUEST_CODE && resultCode == RESULT_OK) {
             viewModel.getStories(page = 1, size = 10, location = 0)
         }
     }
@@ -75,16 +70,18 @@ class MainActivity : AppCompatActivity() {
                 is ResultState.Loading -> {
                     showLoading(true)
                 }
+
                 is ResultState.Success -> {
                     showLoading(false)
                     val stories = result.data.listStory
-                    if (stories.isNotEmpty()){
+                    if (stories.isNotEmpty()) {
                         storyAdapter.submitList(stories)
                         binding.tvEmpty.visibility = View.GONE
-                    }else{
+                    } else {
                         binding.tvEmpty.visibility = View.VISIBLE
                     }
                 }
+
                 is ResultState.Error -> {
                     showLoading(false)
                     Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
@@ -125,7 +122,7 @@ class MainActivity : AppCompatActivity() {
 
 //        using livedata
         viewModel.getSession().observe(this) { result ->
-            if (result.isLogin){
+            if (result.isLogin) {
                 viewModel.getStories(
                     page = 1,
                     size = 10,
@@ -183,9 +180,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
         @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-        }else{
+        } else {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN

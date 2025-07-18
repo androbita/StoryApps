@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.addstory.AddStoryActivity">
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-        
+
         <ImageView
             android:id="@+id/img_add_photo"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            android:background="#E0E0E0"/>
+            android:background="#E0E0E0" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/open_gallery"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp" />
 
             <Button
                 android:id="@+id/btn_open_camera"
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/open_camera"
-                android:layout_marginStart="10dp"/>
+                android:layout_marginStart="10dp" />
 
         </LinearLayout>
 
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:maxLines="5"
-                android:hint="description"/>
+                android:hint="description" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,14 +64,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginTop="20dp"
-            android:text="@string/upload_story"/>
+            android:text="@string/upload_story" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 
 </ScrollView>

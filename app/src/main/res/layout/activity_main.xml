@@ -24,12 +24,12 @@
                 android:text="@string/no_story"
                 android:visibility="gone"
                 android:gravity="center"
-                android:padding="8dp"/>
+                android:padding="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rec_view_story"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -42,7 +42,7 @@
         android:text="@string/logout"
         android:layout_gravity="center|bottom"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_story"
@@ -51,11 +51,11 @@
         app:layout_anchorGravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:layout_anchor="@id/rec_view_story"/>
+        app:layout_anchor="@id/rec_view_story" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

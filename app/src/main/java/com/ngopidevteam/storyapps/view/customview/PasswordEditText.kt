@@ -19,9 +19,9 @@ class PasswordEditText @JvmOverloads constructor(
         lengthBefore: Int,
         lengthAfter: Int
     ) {
-        if (text.toString().isNotEmpty() && text.toString().length < 8){
+        if (text.toString().isNotEmpty() && text.toString().length < 8) {
             setError("Password tidak boleh kurang dari 8 karakter", null)
-        }else{
+        } else {
             error = null
         }
     }

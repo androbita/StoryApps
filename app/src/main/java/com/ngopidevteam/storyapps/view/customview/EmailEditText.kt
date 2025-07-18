@@ -16,7 +16,7 @@ class EmailEditText @JvmOverloads constructor(
     }
 
     private fun setupEmailValidator() {
-        addTextChangedListener(object : TextWatcher{
+        addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
                 start: Int,
@@ -38,11 +38,12 @@ class EmailEditText @JvmOverloads constructor(
             override fun afterTextChanged(s: Editable?) {
                 val email = s.toString().trim()
 
-                error = if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    "Format email tidak valid"
-                }else{
-                    null
-                }
+                error =
+                    if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        "Format email tidak valid"
+                    } else {
+                        null
+                    }
             }
         })
     }

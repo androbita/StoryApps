@@ -8,12 +8,20 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ngopidevteam.storyapps.databinding.ActivityWelcomeBinding
+import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.login.LoginActivity
+import com.ngopidevteam.storyapps.view.login.LoginViewModel
+import com.ngopidevteam.storyapps.view.main.MainActivity
 import com.ngopidevteam.storyapps.view.signup.SignupActivity
 
 class WelcomeActivity : AppCompatActivity() {
+
+    private val viewModel: LoginViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
 
     private lateinit var binding: ActivityWelcomeBinding
 
@@ -22,9 +30,25 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        observeUserLoginState()
         setupView()
         setupAction()
         playAnimation()
+    }
+
+    private fun observeUserLoginState() {
+        viewModel.user.observe(this) { user ->
+            if (user.isLogin){
+                moveToMainActivity()
+            }
+        }
+    }
+
+    private fun moveToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun playAnimation() {
@@ -61,9 +85,9 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun setupView() {
         @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-        }else{
+        } else {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN

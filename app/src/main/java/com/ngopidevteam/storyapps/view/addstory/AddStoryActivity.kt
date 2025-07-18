@@ -1,6 +1,5 @@
 package com.ngopidevteam.storyapps.view.addstory
 
-import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -16,9 +15,9 @@ import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.data.pref.UserPreferences
 import com.ngopidevteam.storyapps.databinding.ActivityAddStoryBinding
 import com.ngopidevteam.storyapps.di.Injection
-import com.ngopidevteam.storyapps.getImageUri
-import com.ngopidevteam.storyapps.reduceImageFile
-import com.ngopidevteam.storyapps.uriToFile
+import com.ngopidevteam.storyapps.helper.getImageUri
+import com.ngopidevteam.storyapps.helper.reduceImageFile
+import com.ngopidevteam.storyapps.helper.uriToFile
 import com.ngopidevteam.storyapps.view.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -54,21 +53,27 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.uploadState.observe(this) { state ->
-            when(state){
-                is ResultState.Loading ->{
+            when (state) {
+                is ResultState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.btnUploadStory.isEnabled = false
                 }
-                is ResultState.Success ->{
+
+                is ResultState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnUploadStory.isEnabled = true
                     Toast.makeText(this, "Story berhasil diupload", Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                is ResultState.Error ->{
+
+                is ResultState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnUploadStory.isEnabled = true
-                    Toast.makeText(this, "Story gagal diupload ${state.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Story gagal diupload ${state.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -82,26 +87,26 @@ class AddStoryActivity : AppCompatActivity() {
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
-        if (isSuccess && currentImageUri != null){
+        if (isSuccess && currentImageUri != null) {
             imageFile = uriToFile(currentImageUri!!, this)
             showImage()
-        }else{
+        } else {
             currentImageUri = null
         }
     }
 
-    private fun startGallery(){
+    private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) {  uri: Uri? ->
-        if (uri != null){
+    ) { uri: Uri? ->
+        if (uri != null) {
             currentImageUri = uri
             imageFile = uriToFile(uri, this)
             showImage()
-        }else{
+        } else {
             Log.d("Photo Picker", "No Media selected")
         }
     }
@@ -113,23 +118,27 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadStory(){
+    private fun uploadStory() {
         val description = binding.edtAddDescription.text.toString()
 
-        if (description.isEmpty()){
+        if (description.isEmpty()) {
             Toast.makeText(this, "Deskripsi tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (imageFile == null){
+        if (imageFile == null) {
             Toast.makeText(this, "Foto tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return
         }
 
         val file = reduceImageFile(imageFile!!)
 
-        if (file.length() > 1000000){
-            Toast.makeText(this, "Ukuran file melebihi 1MB, gunakan gambar lain", Toast.LENGTH_SHORT).show()
+        if (file.length() > 1000000) {
+            Toast.makeText(
+                this,
+                "Ukuran file melebihi 1MB, gunakan gambar lain",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -143,9 +152,9 @@ class AddStoryActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val user: UserModel = userPref.getSession().first()
-            viewModel.uploadStory(user.token, descRequestBody, imageMultipart)
+            viewModel.uploadStory(descRequestBody, imageMultipart)
 
-            Log.d("test", "${user.token}, ${descRequestBody.toString()}, ${imageMultipart.toString()}")
+            Log.d("test", "${user.token}, $descRequestBody, $imageMultipart")
         }
 
         Log.d("UploadDebug", "File exists: ${imageFile?.exists()} size: ${imageFile?.length()}")

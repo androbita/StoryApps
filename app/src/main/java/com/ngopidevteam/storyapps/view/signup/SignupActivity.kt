@@ -17,7 +17,7 @@ class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
 
-    private val viewModel: SignupViewModel by viewModels{
+    private val viewModel: SignupViewModel by viewModels {
         ViewModelFactory(Injection.provideRepository(this))
     }
 
@@ -33,21 +33,31 @@ class SignupActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         viewModel.registerResult.observe(this) { result ->
-            when(result){
+            when (result) {
                 is ResultState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.signupButton.isEnabled = false
                 }
+
                 is ResultState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.signupButton.isEnabled = true
-                    Toast.makeText(this, "Registration Success: ${result.data.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Registration Success: ${result.data.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     finish()
                 }
+
                 is ResultState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.signupButton.isEnabled = true
-                    Toast.makeText(this, "Registration Failed: ${result.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Registration Failed: ${result.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -59,7 +69,7 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString().trim()
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty()){
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -80,9 +90,9 @@ class SignupActivity : AppCompatActivity() {
 
     private fun setupView() {
         @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
-        }else{
+        } else {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN

@@ -1,25 +1,24 @@
 package com.ngopidevteam.storyapps.data.adapter
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import androidx.core.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ngopidevteam.storyapps.R
 import com.ngopidevteam.storyapps.remote.response.ListStoryItem
 import com.ngopidevteam.storyapps.view.detail.DetailActivity
 
-class StoryAdapter(private val listStory: ArrayList<ListStoryItem>): RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
+    RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 
-    fun submitList(stories: List<ListStoryItem>){
+    fun submitList(stories: List<ListStoryItem>) {
         listStory.clear()
         listStory.addAll(stories)
         notifyDataSetChanged()
@@ -44,13 +43,13 @@ class StoryAdapter(private val listStory: ArrayList<ListStoryItem>): RecyclerVie
 
     override fun getItemCount(): Int = listStory.size
 
-    class StoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class StoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val tvJudul: TextView = itemView.findViewById(R.id.tv_judul)
         private val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
         private val imgPhoto: ImageView = itemView.findViewById(R.id.img_photo)
 
-        fun bind(story: ListStoryItem){
+        fun bind(story: ListStoryItem) {
             tvJudul.text = story.name
             tvDescription.text = story.description
 

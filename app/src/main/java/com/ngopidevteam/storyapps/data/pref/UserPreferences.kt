@@ -3,7 +3,6 @@ package com.ngopidevteam.storyapps.data.pref
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -13,7 +12,7 @@ import com.ngopidevteam.storyapps.data.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserPreferences private constructor(private val context: Context){
+class UserPreferences private constructor(private val context: Context) {
 
     companion object {
 
@@ -60,7 +59,7 @@ class UserPreferences private constructor(private val context: Context){
         }
     }
 
-    suspend fun logout(){
+    suspend fun logout() {
         context.dataStore.edit { preferences ->
             preferences.clear()
         }

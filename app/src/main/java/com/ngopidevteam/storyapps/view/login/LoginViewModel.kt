@@ -11,7 +11,7 @@ import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.remote.response.LoginResponse
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val repository: UserRepository): ViewModel() {
+class LoginViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _loginResult = MutableLiveData<ResultState<LoginResponse>>()
     val loginResult: LiveData<ResultState<LoginResponse>> = _loginResult
@@ -19,11 +19,29 @@ class LoginViewModel(private val repository: UserRepository): ViewModel() {
     //liveData untuk userModel
     val user: LiveData<UserModel> = repository.getSession().asLiveData()
 
-    fun loginUser(email: String, password: String){
+    fun loginUser(email: String, password: String) {
         _loginResult.value = ResultState.Loading
         viewModelScope.launch {
-            val result = repository.loginUser(email, password)
-            _loginResult.value = result
+            try {
+                val result = repository.loginUser(email, password)
+                _loginResult.value = result
+
+                if (result is ResultState.Success) {
+                    val loginData = result.data.loginResult
+                    val user = UserModel(
+                        name = loginData?.name.toString(),
+                        token = loginData?.token.toString(),
+                        isLogin = true,
+                        userId = loginData?.userId.toString(),
+                        email = email
+                    )
+
+                    repository.saveSession(user)
+                    repository.updateApiService(loginData?.token.toString())
+                }
+            }catch (e: Exception){
+                _loginResult.value = ResultState.Error(e.message ?: "Terjadi kesalahan")
+            }
         }
     }
 
@@ -32,4 +50,4 @@ class LoginViewModel(private val repository: UserRepository): ViewModel() {
 //            repository.saveSession(user)
 //        }
 //    }
-}
+    }

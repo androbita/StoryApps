@@ -9,12 +9,12 @@ import com.ngopidevteam.storyapps.data.UserRepository
 import com.ngopidevteam.storyapps.remote.response.SimpleResponse
 import kotlinx.coroutines.launch
 
-class SignupViewModel(private val repository: UserRepository): ViewModel() {
+class SignupViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _registerResult = MutableLiveData<ResultState<SimpleResponse>>()
     val registerResult: LiveData<ResultState<SimpleResponse>> = _registerResult
 
-    fun register(name: String, email: String, password: String){
+    fun register(name: String, email: String, password: String) {
         _registerResult.value = ResultState.Loading
         viewModelScope.launch {
             val result = repository.registerUser(name, email, password)

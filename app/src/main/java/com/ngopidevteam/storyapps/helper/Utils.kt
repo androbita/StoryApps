@@ -1,4 +1,4 @@
-package com.ngopidevteam.storyapps
+package com.ngopidevteam.storyapps.helper
 
 import android.content.ContentValues
 import android.content.Context
@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import com.ngopidevteam.storyapps.BuildConfig
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -48,7 +49,7 @@ fun getImageUriForPreQ(context: Context): Uri {
     )
 }
 
-fun uriToFile(uri: Uri, context: Context): File{
+fun uriToFile(uri: Uri, context: Context): File {
     val contentResolver = context.contentResolver
     val file = File.createTempFile("IMG_", ".jpg", context.cacheDir)
     val inputStream = contentResolver.openInputStream(uri)
@@ -59,10 +60,10 @@ fun uriToFile(uri: Uri, context: Context): File{
     return file
 }
 
-fun reduceImageFile(file: File): File{
+fun reduceImageFile(file: File): File {
     val bitmap = BitmapFactory.decodeFile(file.path)
 
-    if (bitmap == null){
+    if (bitmap == null) {
         throw IllegalArgumentException("Gagal decode bitmap dari file: ${file.path}")
     }
     var compressQuality = 100
@@ -74,7 +75,7 @@ fun reduceImageFile(file: File): File{
         val byteArray = stream.toByteArray()
         streamLength = byteArray.size
         compressQuality -= 5
-    }while (streamLength > 1000000 && compressQuality > 5)
+    } while (streamLength > 1000000 && compressQuality > 5)
 
     bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
