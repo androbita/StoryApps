@@ -12,9 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ngopidevteam.storyapps.data.ResultState
 import com.ngopidevteam.storyapps.data.adapter.StoryAdapter
-import com.ngopidevteam.storyapps.data.model.UserModel
 import com.ngopidevteam.storyapps.databinding.ActivityMainBinding
-import com.ngopidevteam.storyapps.remote.response.ListStoryItem
 import com.ngopidevteam.storyapps.view.ViewModelFactory
 import com.ngopidevteam.storyapps.view.addstory.AddStoryActivity
 import com.ngopidevteam.storyapps.view.login.LoginActivity
@@ -26,8 +24,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var user: UserModel
-    private var storyAdapter = StoryAdapter(ArrayList<ListStoryItem>())
+//    private lateinit var user: UserModel
+    private var storyAdapter = StoryAdapter()
 
     companion object {
         const val ADD_STORY_REQUEST_CODE = 123

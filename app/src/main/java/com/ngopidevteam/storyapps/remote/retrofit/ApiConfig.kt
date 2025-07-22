@@ -1,23 +1,18 @@
 package com.ngopidevteam.storyapps.remote.retrofit
 
-import okhttp3.Interceptor
+import com.ngopidevteam.storyapps.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
+
+    const val baseUrl = BuildConfig.BASE_URL
+
     fun getApiService(token: String): ApiService {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-        val authInterceptor = Interceptor { chain ->
-            val req = chain.request()
-            val requestHeader = req.newBuilder()
-                .addHeader("Authorization", "Bearer $token")
-                .build()
-            chain.proceed(requestHeader)
-        }
 
         val client = OkHttpClient.Builder()
             .addInterceptor{ chain ->
@@ -29,7 +24,7 @@ object ApiConfig {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://story-api.dicoding.dev/v1/")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

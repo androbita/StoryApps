@@ -3,60 +3,57 @@ package com.ngopidevteam.storyapps.data.adapter
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ngopidevteam.storyapps.R
+import com.ngopidevteam.storyapps.databinding.ItemStoryBinding
 import com.ngopidevteam.storyapps.remote.response.ListStoryItem
 import com.ngopidevteam.storyapps.view.detail.DetailActivity
 
-class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
-    RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
+class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
 
-    fun submitList(stories: List<ListStoryItem>) {
-        listStory.clear()
-        listStory.addAll(stories)
-        notifyDataSetChanged()
-    }
+//    fun submitList(stories: List<ListStoryItem>) {
+//        listStory.clear()
+//        listStory.addAll(stories)
+//    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): StoryViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_story, parent, false)
+        val binding = ItemStoryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
 
-        return StoryViewHolder(view)
+        return StoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(
         holder: StoryViewHolder,
         position: Int
     ) {
-        holder.bind(listStory[position])
+        val story = getItem(position)
+        holder.bind(story)
     }
 
-    override fun getItemCount(): Int = listStory.size
-
-    class StoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val tvJudul: TextView = itemView.findViewById(R.id.tv_judul)
-        private val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
-        private val imgPhoto: ImageView = itemView.findViewById(R.id.img_photo)
+    class StoryViewHolder(private val binding: ItemStoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(story: ListStoryItem) {
-            tvJudul.text = story.name
-            tvDescription.text = story.description
+            binding.tvJudul.text = story.name
+            binding.tvDescription.text = story.description
 
             Glide.with(itemView.context)
                 .load(story.photoUrl)
                 .placeholder(R.drawable.image_dicoding)
-                .into(imgPhoto)
+                .into(binding.imgPhoto)
 
 
             itemView.setOnClickListener {
@@ -66,12 +63,30 @@ class StoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
-                        Pair(imgPhoto, "profile"),
-                        Pair(tvJudul, "judul"),
-                        Pair(tvDescription, "description")
+                        Pair(binding.imgPhoto, "profile"),
+                        Pair(binding.tvJudul, "judul"),
+                        Pair(binding.tvDescription, "description")
                     )
 
                 itemView.context.startActivity(intent, optionsCompat.toBundle())
+            }
+        }
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }
